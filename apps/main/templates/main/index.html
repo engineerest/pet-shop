@@ -1,10 +1,18 @@
-
-
+{% extends 'base.html' %}
 <div class="topnav">
-  <a href="about">About</a>
-  <a class="active" href="for_us">For Us</a>
-  <a class="active" href="contacts">Contacts</a>
-  <a class="active" href="veterinarsadvice">Veterinar's advice</a>
+        <a class="active" href="article">Blog</a>
+        <a class="active" href="about">About</a>
+        <a class="active" href="for_us">For us</a>
+        <a class="active" href="contacts">Contacts</a>
+        <a class="active" href="veterinarsadvice">Veterinar's advice</a>
 </div>
+<h4>{% block title %}Home{% endblock %}</h4>
 
-<h2>Главная старница</h2>
+
+
+{% block content %}
+
+        <h1>Что то интересное</h1>
+        <p>My first Bootstrap page.</p>
+
+{% endblock %}

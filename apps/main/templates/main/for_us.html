@@ -1,12 +1,12 @@
-<div class="topnav">
-  <a href="home">Home</a>
-  <a class="active" href="about">About</a>
-  <a class="active" href="contacts">Contacts</a>
-  <a class="active" href="veterinarsadvice">Veterinar's advice</a>
+{% extends 'base.html' %}
+{% block content %}
 </div>
-
-<h3>О нас</h3>
+<h4>{% block title %}For us{% endblock %}</h4>
+<h1>О нас</h1>
 <p>В этом сайте один разработчик. Его телеграм аккаунт по ссылке</p>
 <div class= "topnav">
   <a href="contacts">Developer's link</a>
 </div>
+
+
+{% endblock %}

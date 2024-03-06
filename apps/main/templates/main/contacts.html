@@ -1,9 +1,9 @@
-<div class="topnav">
-  <a href="home">Home</a>
-  <a class="active" href="about">About</a>
-  <a class="active" href="for_us">For Us</a>
-  <a class="active" href="veterinarsadvice">Veterinar's advice</a>
-</div>
+{% extends 'base.html' %}
 
-<h3>Контакты</h3>
-<p>Телеграм аккаунт разроботчика по ссылке: https://t.me/Triugolnik180</p>
+{% block content %}
+<h4>{% block title %}Contacts{% endblock %}</h4>
+<h1>Контакты</h1>
+<h3>Телеграм аккаунт разроботчика по ссылке: https://t.me/Triugolnik180</h3>
+
+
+{% endblock %}

@@ -1,10 +1,13 @@
+{% extends 'base.html' %}
 
-<div class="topnav">
-  <a href="home">Home</a>
-  <a class="active" href="for_us">For Us</a>
-  <a class="active" href="contacts">Contacts</a>
-  <a class="active" href="veterinarsadvice">Veterinar's advice</a>
-</div>
 
-<h3>Про сайт</h3>
-<p>Здравствуйте! Это сайт для приобретения кормов для животных.</p>
+<h4>{% block title %}About Site{% endblock %}</h4>
+
+{% block content %}
+
+
+<h1>Про сайт</h1>
+<h3>Здравствуйте! Это сайт для приобретения кормов для животных.</h3>
+
+
+{% endblock %}
