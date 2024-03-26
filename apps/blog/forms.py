@@ -11,7 +11,8 @@ class PostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+            'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'color_post': forms.CheckboxInput(attrs={'class': 'form-color'})
         }
 
 

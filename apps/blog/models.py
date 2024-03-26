@@ -14,6 +14,13 @@ class Post(models.Model):
     views = models.IntegerField(verbose_name='Перегляди', default=0, blank=True)
     created_at = models.DateTimeField(verbose_name='Дата створення', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Дата оновлення', auto_now=True)
+    # color_choices = [
+    #     ('#FF0000', 'Червоний'),
+    #     ('#008000', 'Зелений'),
+    #     ('#0000FF', 'Синій'),
+    #     ('#FFFFFF', 'Білий')
+    # ]
+    # color = models.CommaSeparatedIntegerField(max_length=255, choices=color_choices)
 
     def __str__(self):
         return f'{self.title} - {self.created_at} - {self.is_published}'

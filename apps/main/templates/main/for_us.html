@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
-{% block content %}
+<div class="topnav">
+        <a class="active" href="article">Blog</a>
+        <a class="active" href="index">Main</a>
+        <a class="active" href="about">About</a>
+        <a class="active" href="contacts">Contacts</a>
+        <a class="active" href="veterinarsadvice">Veterinar's advice</a>
 </div>
 <h4>{% block title %}For us{% endblock %}</h4>
-<h1>О нас</h1>
-<p>В этом сайте один разработчик. Его телеграм аккаунт по ссылке</p>
-<div class= "topnav">
-  <a href="contacts">Developer's link</a>
-</div>
+
+{% block content %}
+
+
+      <h1>О нас</h1>
+      <p>В этом сайте один разработчик. Его телеграм аккаунт по ссылке</p>
+      <div class= "topnav">
+        <a href="contacts">Developer's link</a>
+      </div>
 
 
 {% endblock %}
