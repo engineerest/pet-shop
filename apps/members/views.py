@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import random
 
 from .forms import UserCreateForm
 from apps.blog.forms import PostForm
@@ -52,8 +53,12 @@ def signup_view(request):
 def profile_view(request):
     form_create_post = PostForm()
     context = {
-        'form_create_post': form_create_post
+        'form_create_post': form_create_post,
+        # 'themeColor': getRandomColor()
     }
     
     return render(request, 'members/profile.html', context)
 
+def getRandomColor():
+    colors = ["#FF0000", "#800000", "#FFFF00", "#808000"]
+    return f"background: {random.choice(colors)}"

@@ -150,3 +150,8 @@ def redact_post(request, post_id):
         form = PostForm(instance=post)
 
     return redirect('members:profile')
+
+@login_required
+def change_color(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+

@@ -34,7 +34,7 @@
                                 <a href="{% url 'blog:delete_post' post.id %}" class="btn btn-sm" style="background-color: #FF0000; color: #FFFFFF;">Видалити</a>
                             </div>
                         </div>
-                        <a href="{% url 'blog:post' post.id %}" class="text-decoration-none text-white">
+                        <p href="{% url 'blog:post' post.id %}" class="text-decoration-none text-white">
                         <img src="{{post.image.url}}" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{post.title}}</h5>
@@ -79,5 +79,28 @@
       </div>
 </div>
 </div>
+
+<script>
+
+    function ran_col() {
+        const maxValue = 255;
+        const cardHeaders = document.querySelectorAll("div.card-header");
+
+        var currentColorValue = 0;
+
+        var delta = Math.floor(maxValue / cardHeaders.length);q
+
+        for (var i = 0; i < cardHeaders.length; i++) {
+            currentColorValue += delta;
+            if (currentColorValue >= maxValue) {
+                currentColorValue = 0;
+            }
+            const rgb = `rgb(${currentColorValue}, ${currentColorValue}, ${currentColorValue})`;
+            cardHeaders[i].style.background = rgb;
+        }
+    }
+
+    window.onload = ran_col();
+  </script>
 {% endblock %}
 
