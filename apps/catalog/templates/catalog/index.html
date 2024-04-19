@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Каталог{% endblock %}
+
+
+
+{% block content %}
+    
+
+        <div class="mt-3 rounded-3 bg-body-tertiary p-4">
+            <h3>Категорії</h3>
+            {% if object_list %}
+                <div class='row mt-4'>
+                    {% for category in object_list %}
+                        <div class='col-2'>
+                            <div class='card'>
+                                {% if category.has_image %}
+                                    <img src='{{ category.previewURL }}' class='card-img-top' alt='{{ category.name }}'>
+                                {% else %}
+                                    <img src='https://via.placeholder.com/300x200' class='card-img-top' alt='{{ category.name }}'>
+                                {% endif %}
+                                <div class='card-body'>
+                                    <div class="align: center">
+                                        <h5 class='card-title'>{{ category.name }}</h5>
+                                    </div>
+                                </div>
+                                <a href='{{ category.get_absolute_url }}' class='btn btn-primary'>Переглянути</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Категорій немає</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-3 rounded-3 bg-body-tertiary p-4">
+            <h3>Останні надходження</h3>
+            {% if object_list %}
+                <div class='row mt-4'>
+                    {% for product in offers %}
+                        <div class='col-4'>
+                            <div class='card'>
+                                {% if product.previewURL %}
+                                    <img src='{{ product.previewURL }}' class='card-img-top' alt='{{ product.name }}'>
+                                {% else %}
+                                    <img src='https://via.placeholder.com/300x200' class='card-img-top' alt='{{ product.name }}'>
+                                {% endif %}
+                                <div class='card-body'>
+                                    <h5 class='card-title'>{{ product.get_name }}</h5>
+                                    <h6>Ціна: {{ product.price }} грн</h6>
+                                </div>
+                                <div class='card-footer'>
+                                    <a href='{{ product.get_absolute_url }}' class='btn btn-primary'>Товари</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Товарів немає</p>
+            {% endif %}
+        </div>
+{% endblock %}
