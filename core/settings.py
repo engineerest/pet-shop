@@ -29,6 +29,10 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+CSRF_TRUSTED_ORIGINS = [
+    'https://petshop.com',
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,9 +42,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'mptt',
+    'ckeditor',
+    'imagekit',
+    'debug_toolbar',
+    'mixins',
+
     'apps.members',
     'apps.main',
     'apps.blog',
+    'apps.catalog'
 
 ]
 
@@ -54,7 +65,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'cor.urls'
+
+
+
+
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +87,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cor.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database

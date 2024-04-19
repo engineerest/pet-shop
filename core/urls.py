@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 """
-URL configuration for cor project.
+URL configuration for core project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -25,5 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.main.urls')),
     path('blog/', include('apps.blog.urls', namespace='blog')),
+    path('catalog/', include('apps.catalog.urls', namespace='catalog')),
     path('members/', include('apps.members.urls', namespace='members')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
