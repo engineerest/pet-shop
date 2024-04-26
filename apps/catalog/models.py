@@ -25,12 +25,42 @@ class Catalog(models.Model):
     def has_image(self):
         return self.previewURL is not None
 
+    def cart_add_product(request, order):
+        if request.method == 'POST':
+            cartGoods = []
+            addingGood = cartGoods.append(order)
+            return addingGood
+
+    def cart_remove_product(request, order, cartGoods):
+        if request.method == 'POST':
+            removeGood = cartGoods.pop(cartGoods.index(order))
+            return removeGood
+
     class Meta:
         verbose_name = 'Категорія'
         verbose_name_plural = 'Категорії'
         ordering = ['name']
         
-        
+class Cart(models.Model):
+    id = models.TextField(primary_key=True, editable=False, null=False, max_length=45)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+class Order(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    productId = models.TextField(blank=False, null=False)
+    name = models.CharField(max_length=255, null=False)
+    previewURL = models.TextField(blank=True, null=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    quantity = models.IntegerField(null=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def has_image(self):
+        return self.previewURL is not None
+
+
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, verbose_name='Назва')
@@ -82,6 +112,7 @@ class Product(models.Model):
         return self.category.first()
 
 
+
     @display(description='Ціна')
     def price_display(self):
         return f'{self.price} грн.'
@@ -91,8 +122,62 @@ class Product(models.Model):
         image = self.main_image()
         if image:
             return mark_safe(f'<img src="{image.image_thumbnail.url}" />')
-    
-    
+
+
+# class Cart(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     name = models.CharField(max_length=255, verbose_name='Назва')
+#     slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
+#     description = models.TextField(blank=True, verbose_name='Опис', null=True)
+#     quantity = models.PositiveIntegerField(verbose_name='Кількість', default=0)
+#     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Ціна')
+#     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата створення')
+#     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата оновлення')
+#     category = models.ManyToManyField(
+#         to=Catalog,
+#         related_name='products',
+#         through='ProductCategory',
+#         verbose_name='Категорії',
+#         blank=True,
+#     )
+#
+#     class Meta:
+#         verbose_name = 'Товар'
+#         verbose_name_plural = 'Товари'
+#         ordering = ['-created_at']
+#
+#     def __str__(self):
+#         return self.name
+#
+#     def get_absolute_url(self):
+#         return reverse("catalog:product", kwargs={"category_slug": self.main_category().slug, "slug": self.slug})
+#
+#     def all_images(self):
+#         return Image.objects.filter(product=self.id)
+#
+#     def main_image(self):
+#         image = Image.objects.filter(product=self.id, is_main=True).first()
+#         if image:
+#             return image
+#         return self.all_images().first()
+#
+#     def main_category(self):
+#         category = self.category.filter(productcategory__is_main=True).first()
+#         print(category)
+#         if category:
+#             return category
+#         return self.category.first()
+#
+#     @display(description='Ціна')
+#     def price_display(self):
+#         return f'{self.price} грн.'
+#
+#     @display(description='Основне зображення')
+#     def image_tag(self):
+#         image = self.main_image()
+#         if image:
+#             return mark_safe(f'<img src="{image.image_thumbnail.url}" />')
+
 
 class ProductCategory(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
@@ -182,6 +267,7 @@ class ProductDTO:
         self.price = kwargs.get('price', None)
         self.names = kwargs.get('names', None)
         self.name = kwargs.get('name', None)
+        self.description = kwargs.get('description', None)
 
     def to_dict(self):
         return self.__dict__
@@ -207,3 +293,4 @@ class ProductDTO:
     @classmethod
     def from_dict(cls, data):
         return cls(**data)
+

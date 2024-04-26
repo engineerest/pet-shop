@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'apps.members',
     'apps.main',
     'apps.blog',
-    'apps.catalog'
+    'apps.catalog',
 
 ]
 

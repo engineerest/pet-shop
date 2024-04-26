@@ -41,9 +41,8 @@
                                     <h5 class='card-title'>{{ product.get_name }}</h5>
                                     <h6 class='card-title'>{{ product.price }} грн</h6>
                                 </div>
-                                <div class='card-footer'>
-                                    <a href='{{ product.get_absolute_url }}' class='btn btn-primary'>Подробнее</a>
-                                </div>
+                                <a href='{{ product.get_absolute_url }}' class='btn btn-primary'>Додати до кошику</a>
+
                             </div>
                         </div>
                     {% endfor %}

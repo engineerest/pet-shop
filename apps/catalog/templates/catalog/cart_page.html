@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Кошик{% endblock %}
+
+
+
+{% block content %}
+
+<h5>У Вашій корзині товарів: {{ orders.count }}</h5>
+
+{% if orders %}
+    <div class='row mt-4'>
+        {% for order in orders %}
+            <div class='col-4'>
+                <div class='card'>
+                    {% if order.has_image %}
+                    <img src='{{ order.previewURL }}' class='card-img-top' alt='{{ order.name }}'>
+                    {% else %}
+                    <img src='https://via.placeholder.com/300x200' class='card-img-top' alt='{{ product.name }}'>
+                    {% endif %}
+                    <div class='card-body'>
+                        <h5 class='card-title'>{{ order.name }}</h5>
+                        <h6 class='card-title'>{{ order.price }} грн</h6>
+                    </div>
+                    <a href='{{ product.get_absolute_url }}' class='btn btn-primary'>Купити</a>
+                    <a href='{{ catalog.cart_remove_product }}' clas='btn btn-primary'>Видалити з корзини</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Товаров нет</p>
+{% endif %}
+{% endblock %}

@@ -2,7 +2,7 @@ import requests
 from django.urls import reverse
 
 from apps.main.mixins import ListViewBreadcrumbMixin, DetailViewBreadcrumbMixin
-from .models import Catalog, Product, CategoryDTO, ProductDTO
+from .models import Catalog, Product, CategoryDTO, ProductDTO, Cart, Order
 
 
 # import Q
@@ -87,32 +87,63 @@ class ProductByCategoryView(ListViewBreadcrumbMixin):
 
 
 
-class ProductDetailView(DetailViewBreadcrumbMixin):
+class ProductDetailView(ListViewBreadcrumbMixin):
     model = Product
     template_name = 'catalog/product.html'
     context_object_name = 'product'
     
     def get_breradcrumb(self):
         breadcrumbs = { reverse('catalog:index'): 'Каталог' }
-        category = self.object.main_category()
-        if category:
-            if category.parent:
-                linkss = []
-                parent = category.parent
-                while parent is not None:
-                    linkss.append(
-                        (
-                            reverse('catalog:category', kwargs={'slug': parent.slug}),
-                            parent.name
-                        )
-                    )
-                    parent = parent.parent
-                for url, name in reversed(linkss):
-                    breadcrumbs[url] = name
-                    breadcrumbs.update({url: name})
-            breadcrumbs.update({reverse('catalog:category', kwargs={'slug': category.slug}): category.name})
-        breadcrumbs.update({'current': self.object.name})
         return breadcrumbs
+
+    def get_product_by_id(self, product_id):
+        url = f'https://prod.salesbox.me/api/v4/companies/barnipet/offers/{product_id}?lang=uk'
+        response = requests.get(url)
+        data = response.json()['data']
+        if data is not None:
+            return ProductDTO.from_dict(data)
+        return None
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'] = self.get_product_by_id(self.kwargs['product_id'])
+        return context
+
+
+class CartListView(ListViewBreadcrumbMixin):
+    # model = Cart
+    template_name = 'catalog/cart_page.html'
+    context_object_name = 'cart'
+
+    def get_queryset(self):
+        return self.find_of_create_cart()
+
+    def get_breradcrumb(self):
+        breadcrumbs = {reverse('catalog:index'): 'Каталог'}
+        return breadcrumbs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.find_of_create_cart()
+        context['cart'] = cart
+
+        orders = Order.objects.filter(cart=cart)
+        context['orders'] = orders
+        return context
+
+    def find_of_create_cart(self):
+        session_id = self.request.session.session_key
+        print(session_id)
+
+        if session_id is None:
+            raise Exception("No active session")
+
+        try:
+            return Cart.objects.get(id=session_id)
+        except Cart.DoesNotExist:
+            print("cart does not exist")
+            print("Creating new cart")
+            return Cart.objects.create(id=session_id)
+
 
 
 
