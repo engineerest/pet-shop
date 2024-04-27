@@ -1,4 +1,11 @@
+from datetime import timezone, datetime
+from multiprocessing import context
+from os import path
+
 import requests
+from django.db.models import Sum
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from apps.main.mixins import ListViewBreadcrumbMixin, DetailViewBreadcrumbMixin
@@ -49,6 +56,11 @@ class ProductByCategoryView(ListViewBreadcrumbMixin):
         response = requests.get(url)
         data = response.json()
         return data
+    def get_product_by_id(productId):
+        url = f'https://prod.salesbox.me/api/v4/companies/barnipet/offers/{productId}'
+        response = requests.get(url)
+        payload = response.json()['data']
+        return ProductDTO.from_dict(payload)
 
     def get_current_category(self, categoryId):
         model = Catalog.objects.get(id=categoryId)
@@ -85,7 +97,29 @@ class ProductByCategoryView(ListViewBreadcrumbMixin):
         }
         return self.breadcrumbs
 
+    def addToCart(request, product_id):
+        session_id = request.session.session_key
+        print(session_id)
 
+        if session_id is None:
+            raise Exception("No active session")
+        cart = None
+        try:
+            cart = Cart.objects.get(id=session_id)
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(id=session_id)
+
+        try:
+            order_query = Order.objects.get(productId=product_id, cart=cart)
+            order = order_query.__dict__
+            order_id = order['id']
+            quantity = order['quantity']
+            Order.objects.filter(id=order_id).update(quantity=quantity + 1, updated=datetime.now())
+        except Order.DoesNotExist:
+            orderDTO = ProductByCategoryView.get_product_by_id(productId=product_id)
+            order = Order(productId=product_id, name=orderDTO.name, price=orderDTO.price, previewURL=orderDTO.previewURL, quantity=1, created=datetime.now(), updated=datetime.now(), cart=cart)
+            Order.save(order)
+        return HttpResponseRedirect("catalog")
 
 class ProductDetailView(ListViewBreadcrumbMixin):
     model = Product
@@ -111,7 +145,7 @@ class ProductDetailView(ListViewBreadcrumbMixin):
 
 class CartListView(ListViewBreadcrumbMixin):
     # model = Cart
-    template_name = 'catalog/cart_page.html'
+    template_name = 'catalog/cart.html'
     context_object_name = 'cart'
 
     def get_queryset(self):
@@ -128,6 +162,12 @@ class CartListView(ListViewBreadcrumbMixin):
 
         orders = Order.objects.filter(cart=cart)
         context['orders'] = orders
+
+        total = 0
+        for order in orders:
+            total += order.get_cost()
+
+        context['total'] = total
         return context
 
     def find_of_create_cart(self):
@@ -144,10 +184,25 @@ class CartListView(ListViewBreadcrumbMixin):
             print("Creating new cart")
             return Cart.objects.create(id=session_id)
 
+    def decrement(request, cart_id, order_id):
+        quantity = Order.objects.get(id=order_id).__dict__['quantity']
+        if quantity == 1:
+            Order.objects.get(id=order_id).delete()
+        else:
+            Order.objects.filter(id=order_id).update(quantity=quantity - 1)
+
+        return HttpResponseRedirect("/catalog/cart")
+
+    def increment(request, cart_id, order_id):
+        quantity = Order.objects.get(id=order_id).__dict__['quantity']
+        Order.objects.filter(id=order_id).update(quantity=quantity + 1)
+
+        return HttpResponseRedirect("/catalog/cart")
+
+    def deleteOrder(request, cart_id, order_id):
+        order = Order.objects.get(id=order_id)
+        order.delete()
+        return HttpResponseRedirect("/catalog/cart")
 
 
-
-
-
-
-
+    # return HttpResponseRedirect("/catalog/cart")

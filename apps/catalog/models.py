@@ -60,6 +60,11 @@ class Order(models.Model):
     def has_image(self):
         return self.previewURL is not None
 
+    def get_cost(self):
+        if self.quantity < 1:
+            return self.price
+        return self.price * self.quantity
+
 
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -122,61 +127,6 @@ class Product(models.Model):
         image = self.main_image()
         if image:
             return mark_safe(f'<img src="{image.image_thumbnail.url}" />')
-
-
-# class Cart(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(max_length=255, verbose_name='Назва')
-#     slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
-#     description = models.TextField(blank=True, verbose_name='Опис', null=True)
-#     quantity = models.PositiveIntegerField(verbose_name='Кількість', default=0)
-#     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Ціна')
-#     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата створення')
-#     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата оновлення')
-#     category = models.ManyToManyField(
-#         to=Catalog,
-#         related_name='products',
-#         through='ProductCategory',
-#         verbose_name='Категорії',
-#         blank=True,
-#     )
-#
-#     class Meta:
-#         verbose_name = 'Товар'
-#         verbose_name_plural = 'Товари'
-#         ordering = ['-created_at']
-#
-#     def __str__(self):
-#         return self.name
-#
-#     def get_absolute_url(self):
-#         return reverse("catalog:product", kwargs={"category_slug": self.main_category().slug, "slug": self.slug})
-#
-#     def all_images(self):
-#         return Image.objects.filter(product=self.id)
-#
-#     def main_image(self):
-#         image = Image.objects.filter(product=self.id, is_main=True).first()
-#         if image:
-#             return image
-#         return self.all_images().first()
-#
-#     def main_category(self):
-#         category = self.category.filter(productcategory__is_main=True).first()
-#         print(category)
-#         if category:
-#             return category
-#         return self.category.first()
-#
-#     @display(description='Ціна')
-#     def price_display(self):
-#         return f'{self.price} грн.'
-#
-#     @display(description='Основне зображення')
-#     def image_tag(self):
-#         image = self.main_image()
-#         if image:
-#             return mark_safe(f'<img src="{image.image_thumbnail.url}" />')
 
 
 class ProductCategory(models.Model):
@@ -273,7 +223,7 @@ class ProductDTO:
         return self.__dict__
 
     def get_absolute_url(self):
-        return '/products/{}'.format(self.id)
+        return '/catalog/products/{}'.format(self.id)
 
     def get_name(self):
         if self.name is not None:

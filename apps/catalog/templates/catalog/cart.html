@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Кошик{% endblock %}
+
+
+{% block content %}
+
+<h5>У Вашій корзині товарів: {{ orders.count }}</h5>
+
+<h6>Всього: {{ total }} грн</h6>
+<p>
+    <button class="btn btn-primary" type="button">Оформити заказ</button>
+</p>
+
+{% if orders %}
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-1">
+                </div>
+                <div class="col col-lg-5">
+                    Назва
+                </div>
+                <div class="col col-lg-1">
+                    Ціна
+                </div>
+                <div class="col col-lg-1">
+                    Зменшити
+                </div>
+                <div class="col col-lg-1">
+                    Кількість
+                </div>
+                <div class="col col-lg-1">
+                    Збільшити
+                </div>
+                <div class="col col-lg-1">
+                    Вартість
+                </div>
+                <div class="col col-lg-1">
+                    Видалити
+                </div>
+            </div>
+        </div>
+    </li>
+    {% for order in orders %}
+    <li class="list-group-item">
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-1">
+                    <img alt="Responsive image" class="img-fluid" src='{{ order.previewURL }}'>
+                </div>
+                <div class="col col-lg-5">
+                    {{ order.name }}
+                </div>
+                <div class="col col-lg-1">
+                    {{ order.price }}
+                </div>
+                <div class="col col-lg-1">
+                    <button type="button" class="btn btn-warning" onclick="decrement('{{ order.id }}')" id="btn_decrement_{{comment.id}}">-</button>
+                </div>
+                <div class="col col-lg-1">
+                    <p>{{ order.quantity }}</p>
+                </div>
+                <div class="col col-lg-1">
+                    <button type="button" class="btn btn-success" onclick="increment('{{ order.id }}')" id="btn_increment_{{comment.id}}">+</button>
+                </div>
+                <div class="col col-lg-1">
+                    <p>{{ order.get_cost }}</p>
+                </div>
+                <div class="col col-lg-1">
+                    <button type="button" class="btn btn-danger" onclick="deleteOrder('{{ order.id }}')" id="btn_delete_{{comment.id}}">Видалити</button>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Товаров нет</p>
+{% endif %}
+
+<script>
+    function increment(order_id){
+        fetch('{% url "catalog:increment" cart.id 0 %}'.replace('0', order_id))
+        .then(data => {
+            console.log(data)
+            window.location.reload();
+        })
+        .catch(error => console.log(error));
+    }
+
+    function decrement(order_id){
+        fetch('{% url "catalog:decrement" cart.id 0 %}'.replace('0', order_id))
+        .then(data => {
+            console.log(data)
+            window.location.reload();
+        })
+        .catch(error => console.log(error));
+    }
+
+    function deleteOrder(order_id){
+        fetch('{% url "catalog:delete" cart.id 0 %}'.replace('0', order_id))
+                .then(data => {
+                    console.log(data)
+                    window.location.reload();
+                })
+                .catch(error => console.log(error));
+    }
+</script>
+
+
+{% endblock %}
