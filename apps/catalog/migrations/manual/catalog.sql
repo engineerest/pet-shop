@@ -1,0 +1,22 @@
+INSERT INTO catalog_catalog (id, "internalId", name, description, "baseUrl", "originalURL", "previewURL", "order")
+VALUES ('b243140d-8937-4c05-bb78-aaa35b9020e9', 'bb39b231-0433-4b9d-bdca-ac35b7b47423', 'Собаки', 'Товари для собак',
+        'https://prod.salesbox.me/api/v4/companies/barnipet/categories/b243140d-8937-4c05-bb78-aaa35b9020e9',
+        'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/665f2d84-e8e9-4dc4-bb19-622038b3d05b.png',
+        'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/665f2d84-e8e9-4dc4-bb19-622038b3d05b.png', 1),
+    ('2383fcdb-18d9-4e84-a68f-d765932c81d6', 'a86e6b70-52f5-482c-8d2c-32c13d5138e9', 'Коти', 'Товари для котів',
+     'https://prod.salesbox.me/api/v4/companies/barnipet/categories/2383fcdb-18d9-4e84-a68f-d765932c81d6',
+     'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/c425042a-477e-4a7b-8880-a490f452e0e2.png',
+     'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/c425042a-477e-4a7b-8880-a490f452e0e2.png', 2),
+    ('3e6bdde0-e7ae-468a-8d12-bc1df844850f', '060c71ab-599c-4aa0-b8eb-9db1cee8f137', 'Розпродаж', 'Розпродаж',
+     'https://prod.salesbox.me/api/v4/companies/barnipet/categories/3e6bdde0-e7ae-468a-8d12-bc1df844850f',
+     'https://d3og57k1dk4307.cloudfront.net/barnipet/preview/categories/f260d044-8a8b-4497-b694-aeaa03e77d0e.png',
+     'https://d3og57k1dk4307.cloudfront.net/barnipet/preview/categories/f260d044-8a8b-4497-b694-aeaa03e77d0e.png', 3),
+    ('a7aa9074-2630-4f2b-903c-4c53321fce46', 'd2df1539-73d6-4df2-b2fc-47c4eebb0fa0', 'Птахи', 'Товари для птахів',
+     'https://prod.salesbox.me/api/v4/companies/barnipet/categories/a7aa9074-2630-4f2b-903c-4c53321fce46',
+     'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/c0eae48b-6ad6-41c9-8b16-c69704f5c432.png',
+     'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/c0eae48b-6ad6-41c9-8b16-c69704f5c432.png', 4),
+    ('679aa864-462d-4055-9a29-a56da2c8fbe0', 'd492924a-c7d0-4c99-98b8-4f284a40e5b', 'Гризуни', 'Товари для гризунів',
+     'https://prod.salesbox.me/api/v4/companies/barnipet/offers/filter?page=1&pageSize=12&categoryInternalId=d492924a-c7d0-4c99-98b8-4f284a40e5b8&categoryId=679aa864-462d-4055-9a29-a56da2c8fbe0&lang=uk',
+     'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/49a0945f-3570-4acc-a0ec-7cc8bdd41843.png',
+     'https://sales-box-photos.s3-eu-central-1.amazonaws.com/barnipet/preview/categories/49a0945f-3570-4acc-a0ec-7cc8bdd41843.png', 5)
+ON CONFLICT (id) DO NOTHING ;

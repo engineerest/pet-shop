@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Каталог{% endblock %}
+
+
+{% block content %}
+<div class="mt-3 rounded-3 bg-body-tertiary p-4">
+    <h3>Категорії</h3>
+    <h6>{{ categories.count }} категорій</h6>
+    {% if object_list %}
+    <div class='row mt-4'>
+        {% for category in object_list %}
+        <div class='col-2'>
+            <div class='card'>
+                {% if category.has_image %}
+                <img alt='{{ category.name }}' class='card-img-top' src='{{ category.previewURL }}'>
+                {% else %}
+                <img alt='{{ category.name }}' class='card-img-top' src='https://via.placeholder.com/300x200'>
+                {% endif %}
+                <div class='card-body'>
+                    <div class="align: center">
+                        <h5 class='card-title'>{{ category.name }}</h5>
+                    </div>
+                </div>
+                <a class='btn btn-primary' href='{{ category.get_absolute_url }}'>Переглянути</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Категорій немає</p>
+    {% endif %}
+</div>
+
+<div class="mt-3 rounded-3 bg-body-tertiary p-4">
+    <h3>Останні надходження</h3>
+    <h6>{{ id.count }}</h6>
+    {% if object_list %}
+    <div class='row mt-4'>
+        {% for product in offers %}
+        <div class='col-4'>
+            <div class='card'>
+                {% if product.previewURL %}
+                <a href="product.html">
+                    <img alt='{{ product.name }}' class='card-img-top' src='{{ product.previewURL }}'>
+                </a>
+                {% else %}
+                <img alt='{{ product.name }}' class='card-img-top' src='https://via.placeholder.com/300x200'>
+                {% endif %}
+                <div class='card-body'>
+                    <h5 class='card-title'>{{ product.get_name }}</h5>
+                    <h6>Ціна: {{ product.price }} грн</h6>
+                    <div class="container">
+                        <div aria-label="Панель инструментов с группами кнопок" class="btn-toolbar justify-content-end" role="toolbar">
+                            <div aria-label="Перегляд" class="btn-group me-2" role="group">
+                                <a href='{{ product.get_absolute_url }}' class="btn btn-info" role="button">
+                                    <svg class="bi bi-eye" fill="currentColor" height="16" viewBox="0 0 16 16"
+                                         width="16" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div aria-label="Придбати" class="btn-group me-2" role="group">
+                                <button type="button" class="btn btn-success" onclick="addToCart('{{ product.id }}')">
+                                    <svg class="bi bi-cart4" fill="currentColor" height="16" viewBox="0 0 16 16"
+                                         width="16" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Товарів немає</p>
+    {% endif %}
+</div>
+
+<script>
+    function addToCart(product_id){
+        fetch('{% url "catalog:add" 0 %}'.replace('0', product_id))
+        .then(data => {
+            console.log(data)
+            // window.location.reload();
+        })
+        .catch(error => console.log(error));
+    }
+</script>
+
+{% endblock %}
